@@ -56,7 +56,7 @@ q.push("hello")
 q.Pop()
 q.Size() // return 1
 q.Pop()
-q.Isempty // return true
+q.Isempty() // return true
 ```
 - **orderedMap**
 ```go
