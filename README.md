@@ -16,7 +16,7 @@ other := map[string]interface{}{
             		"gender": "man",
             		"age":    22,
             	}
-cm = NewCHainMap(child, other) // get a chain map for child and other like map[string]interface{}{"country": "China", "age": 21, "gender": "man"}
+cm = NewChainMap(child, other) // get a chain map for child and other, return map[string]interface{}{"country": "China", "age": 21, "gender": "man"}
 keys := cm.Keys() // return keys for chain map
 values := cm.Values() // return values for chain map
 parentsChainMap := cm.Parents() // return a new chain map except the first map for cm chain map
