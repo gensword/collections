@@ -5,7 +5,7 @@ type OrderedMap struct {
 	List *LinkedList
 }
 
-func newOederedMap () *OrderedMap {
+func NewOederedMap () *OrderedMap {
 	om := new(OrderedMap)
 	om.Dict = make(map[interface{}]*LinkedNode)
 	om.List = NewLinkdList()
