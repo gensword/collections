@@ -6,7 +6,7 @@ import (
 )
 
 func TestOrderedMap(t *testing.T) {
-	om := newOederedMap()
+	om := NewOederedMap()
 	om.Set("name", "gensword", true)
 	om.Set("age", 21, true)
 	v, ok := om.Get("age")
