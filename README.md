@@ -31,17 +31,23 @@ counter.Add(1) // now twice 1
 top2 := counter.MostCommon(2) // get a slice like PairList{Pair{1, 2}, Pair{"b", 2}} that indicate the top 2 elements and their counts
 counter.Elements() //return all elements
 counter.Del(1)
-len := counter.Len()
+len := counter.Len() // return length of counter 4
 ```
 - **deque**
 ```go
+import "container/list"
+
 dq := NewDeque()
 dq.AppendLeft(1) // push left
 dq.Append("gensword") // push right
 dq.Pop() // pop right
 dq.PopLeft() // pop left
-dq.Extend() // extend a *list.List right
-dq.ExtendLeft() // extend a *list.List left
+other := list.New()
+other.PushBack(1)
+other.PushBack(2)
+other.PushFront(5)
+dq.Extend(other) // extend a *list.List right
+dq.ExtendLeft(other) // extend a *list.List left
 dq.Rotate(1) // right step 1
 dq.Rotate(-1) // left step 1
 dq.Index(1, 0, dq.Size()) // return the first position index of element and true which value is 1 between 0 and len(dq), if not found, return zero and false
