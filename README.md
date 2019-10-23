@@ -31,6 +31,7 @@ counter.Add(1) // now twice 1
 top2 := counter.MostCommon(2) // get a slice like PairList{Pair{1, 2}, Pair{"b", 2}} that indicate the top 2 elements and their counts
 counter.Elements() //return all elements
 counter.Del(1)
+<<<<<<< HEAD
 len := counter.Len() // return length of counter 4
 ```
 - **deque**
@@ -42,6 +43,7 @@ dq.AppendLeft(1) // push left
 dq.Append("gensword") // push right
 dq.Pop() // pop right
 dq.PopLeft() // pop left
+<<<<<<< HEAD
 other := list.New()
 other.PushBack(1)
 other.PushBack(2)
