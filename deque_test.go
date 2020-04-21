@@ -1,62 +1,65 @@
 package collections
 
 import (
-	"container/list"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestDeque (t *testing.T) {
 	dq := NewDeque()
-	dq.Append(1)
-	assert.Equal(t,  1, dq.Size())
-	v, ok := dq.Pop()
-	assert.Equal(t, 1, v)
-	assert.Equal(t, true, ok)
-	assert.Equal(t, 0, dq.Size())
-	v, ok = dq.Pop()
-	assert.Equal(t,nil, v)
-	assert.Equal(t, false, ok)
-	dq.Append(2)
-	dq.AppendLeft(3)
-	dq.Append(4)
-	position, find := dq.Index(2, 3, 2)
-	assert.Equal(t, -1, position)
+	waitAppend := []interface{}{1,2,3,4,5}
+	for _, v := range waitAppend {
+		dq.Append(v)
+	}
+	index, find := dq.Index(waitAppend[1], 0, len(waitAppend))
+	assert.Equal(t, 1, index)
+	assert.Equal(t, true, find)
+	index, find = dq.Index(waitAppend[1], 2, len(waitAppend))
+	assert.Equal(t, 0, index)
 	assert.Equal(t, false, find)
-	position, find = dq.Index(2, 4, 6)
-	assert.Equal(t, -1, position)
-	assert.Equal(t, false, find)
-	position, find = dq.Index(2, 0, 5)
-	assert.Equal(t, 1, position)
-	position, find = dq.Index(5, 0, 4)
-	assert.Equal(t, 0, position)
-	assert.Equal(t, false, find)
-	v, ok = dq.Pop()
-	assert.Equal(t, 4, v)
-	v, ok = dq.PopLeft()
-	assert.Equal(t, 3, v)
-	other := list.New()
-	other.PushBack(1)
-	other.PushBack(2)
-	other.PushFront(5)
-	dq.Extend(other)
-	v, ok = dq.Remove(2)
-	assert.Equal(t, 1, v)
+	size := dq.Size()
+	assert.Equal(t, size, 5)
+	for i := 0; i <= size; i++ {
+		v, canPop := dq.PopLeft()
+		if i == size {
+			assert.Equal(t, false, canPop)
+			assert.Equal(t, nil, v)
+		} else {
+			assert.Equal(t, true, canPop)
+			assert.Equal(t, waitAppend[i], v)
+		}
+	}
+	assert.Equal(t, dq.Size(), 0)
+	for _, v := range waitAppend {
+		dq.AppendLeft(v)
+	}
+	size = dq.Size()
+	for i := 0; i <= size; i++ {
+		v, canPop := dq.Pop()
+		if i == size {
+			assert.Equal(t, false, canPop)
+			assert.Equal(t, nil, v)
+		} else {
+			assert.Equal(t, true, canPop)
+			assert.Equal(t, waitAppend[i], v)
+		}
+	}
+	assert.Equal(t, false, dq.Remove(waitAppend[0]))
+	for _, v := range waitAppend {
+		dq.Append(v)
+	}
+	step := 2
+	dq.Rotate(step)
+	for i := 0; i < len(waitAppend); i++{
+		var pos int
+		if i + step >= len(waitAppend) {
+			pos = i + step - len(waitAppend)
+		} else {
+			pos = i + step
+		}
+		actual, _ := dq.Index(waitAppend[i], 0, len(waitAppend))
+		assert.Equal(t, pos, actual)
+	}
 	dq.Clear()
 	assert.Equal(t, 0, dq.Size())
-	dq.Append(1)
-	dq.AppendLeft(2)
-	dq.Rotate(1)
-	v, ok = dq.Pop()
-	assert.Equal(t, 2, v)
-	dq.Append(3)
-	dq.Rotate(-1)
-	v, ok = dq.Pop()
-	assert.Equal(t, 1, v)
-	v, ok = dq.Pop()
-	assert.Equal(t, 3, v)
-	dq.Append(3)
-	dq.ExtendLeft(other)
-	v, ok = dq.PopLeft()
-	assert.Equal(t, 5, v)
 }

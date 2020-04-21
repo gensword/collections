@@ -6,26 +6,27 @@ import (
 )
 
 func TestOrderedMap(t *testing.T) {
-	om := NewOederedMap()
+	om := NewOrderedMap()
 	om.Set("name", "gensword", true)
 	om.Set("age", 21, true)
+	om.Set("gender", 1, true)
 	v, ok := om.Get("age")
 	assert.Equal(t, 21, v)
 	assert.Equal(t, true, ok)
 	v, ok = om.Get("location")
 	assert.Equal(t, false, ok)
-	om.Set("name", "hello", false)
-	items := []map[interface{}]interface{}{map[interface{}]interface{}{"name": "hello"}, map[interface{}]interface{}{"age": 21}}
+	om.Set("age", 22, false)
+	om.Set("name", "hello", true)
 	i := 0
+	orderedKey := []interface{}{"age", "gender", "name"}
+	orderedValue := []interface{}{22, 1, "hello"}
 	for item := range om.Iter() {
-		assert.Equal(t, items[i], item)
+		assert.Equal(t, orderedKey[i], item.Key)
+		assert.Equal(t, orderedValue[i], item.Value)
 		i++
 	}
 	ok = om.Del("name")
 	assert.Equal(t, true, ok)
 	ok = om.Del("location")
 	assert.Equal(t, false, ok)
-	om.Set("location", "shanghai", true)
-	om.Set("age", 22, true)
-	assert.Equal(t, 22, om.List.tail.pre.value)
 }

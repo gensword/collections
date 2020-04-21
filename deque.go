@@ -17,19 +17,22 @@ func NewDeque() (dq *Deque) {
 	return dq
 }
 
+//Append push back a item
 func (dq *Deque) Append(v interface{}) {
 	dq.mut.Lock()
 	defer dq.mut.Unlock()
 	dq.data.PushBack(v)
 }
 
+// push front a item
 func (dq *Deque) AppendLeft(v interface{}) {
 	dq.mut.Lock()
 	defer dq.mut.Unlock()
 	dq.data.PushFront(v)
 }
 
-func (dq *Deque) Pop() (v interface{}, canGet bool) {
+//Pop pop a item from back, if dequeue
+func (dq *Deque) Pop() (v interface{}, canPop bool) {
 	dq.mut.Lock()
 	defer dq.mut.Unlock()
 	if dq.data.Len() > 0 {
@@ -41,6 +44,7 @@ func (dq *Deque) Pop() (v interface{}, canGet bool) {
 	}
 }
 
+//PopLeft pop a item from front
 func (dq *Deque) PopLeft() (v interface{}, canGet bool) {
 	dq.mut.Lock()
 	defer dq.mut.Unlock()
@@ -53,25 +57,24 @@ func (dq *Deque) PopLeft() (v interface{}, canGet bool) {
 	}
 }
 
+//Clear clear a dequeue
 func (dq *Deque) Clear() {
-	for ; dq.data.Len() > 0; dq.Pop(){
-	}
+	dq.data = list.New()
 }
 
-func (dq *Deque) Remove(v interface{}) (removeNum int, canRemove bool) {
+// Remove remove the first elem match v
+func (dq *Deque) Remove(v interface{}) (removed bool) {
 	dq.mut.Lock()
 	defer dq.mut.Unlock()
 	if dq.data.Len() == 0 {
-		return 0, false
+		return false
 	}
 	find := false
 	current := dq.data.Front()
 	var needDelete *list.Element
 	for i := 0; i < dq.data.Len(); i++ {
 		if current.Value == v {
-			if !find {
-				find = true
-			}
+			find = true
 			needDelete = current
 			break
 		} else {
@@ -80,20 +83,21 @@ func (dq *Deque) Remove(v interface{}) (removeNum int, canRemove bool) {
 	}
 	if find {
 		dq.data.Remove(needDelete)
-		return 1, true
+		return true
 	} else {
-		return 0, true
+		return false
 	}
 }
 
+// Index return the first index between start(include) and end(not include) which match v, find will be false if can not find
 func (dq *Deque) Index(v interface{}, start int, end int) (position int, find bool) {
 	dq.mut.Lock()
 	defer dq.mut.Unlock()
 	if start >= end || start < 0 || start >= dq.data.Len() {
-		return -1, false
+		return 0, false
 	} else {
 		for current, i := dq.data.Front(), 0; current != nil; current, i = current.Next(), i + 1 {
-			if current.Value == v {
+			if current.Value == v && start <= i && end > i{
 				return i, true
 			}
 		}
@@ -101,18 +105,21 @@ func (dq *Deque) Index(v interface{}, start int, end int) (position int, find bo
 	}
 }
 
+//ExtendLeft push front a container/list
 func (dq *Deque) ExtendLeft(other *list.List) {
 	dq.mut.Lock()
 	defer dq.mut.Unlock()
 	dq.data.PushFrontList(other)
 }
 
+//Extend push back a container/list
 func (dq *Deque) Extend(other *list.List) {
 	dq.mut.Lock()
 	defer dq.mut.Unlock()
 	dq.data.PushBackList(other)
 }
 
+// Rotate right shift step, if step < 0 then left shift step
 func (dq *Deque) Rotate(step int) {
 	if dq.data.Len() == 0 {
 		return
@@ -130,6 +137,7 @@ func (dq *Deque) Rotate(step int) {
 	}
 }
 
+// return length of the deque
 func (dq *Deque) Size() int {
 	dq.mut.Lock()
 	defer dq.mut.Unlock()

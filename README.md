@@ -1,28 +1,8 @@
 # collections
-golang collections like python include ordered map and chain map...
+golang collections like python include ordered map and set, dequeue,queue,counter
 ***
 implemented *chainmap*, *counter*, *deque(thread safe)*, *queue(thread safe)*, *orderedmap* and *set* datatypes so far.
 ##Basic usages
-- **chain map**
-```go
-cm := NewChainMap() // empty chain map
-child := map[string]interface{}{
-		"country": "China",
-		"age":     21,
-	}
-cm.NewChild(child) // add a new map element
-other := map[string]interface{}{
-            		"name":   "gensword",
-            		"gender": "man",
-            		"age":    22,
-            	}
-cm = NewChainMap(child, other) // get a chain map for child and other, return map[string]interface{}{"country": "China", "age": 21, "gender": "man"}
-keys := cm.Keys() // return keys for chain map
-values := cm.Values() // return values for chain map
-parentsChainMap := cm.Parents() // return a new chain map except the first map for cm chain map
-parentsChainMap.Maps() // return a map slice
-cm.Map["name"] // get gensword
-```
 - **counter**
 ```go
 counter := NewCounter("a", "b", "c", "d", "b") // init a counter with some elements
@@ -71,10 +51,10 @@ om.Set("name", "gensword", true) // set name, the last bool argument is a flag i
 om.Set("age", 21)
 v, ok := om.Get("age") // get the value of age, if not found, reutn nil and false
 for item := range om.Iter() {
-		
-	} // the first item will be map[interface{}]interface{}{"name": "gensword"}, and the second will be map[interface{}]interface{}{"age": 21}
+		fmt.Println(item.Key, item.Value) // print k-v order by set time
+	}
 om.Del("name") // delete the key name, if not exists, return false
-```
+``` 
 - **set**
 ```go
 s := NewSet(1, "hello") // init a set with two elements
@@ -87,5 +67,4 @@ union := s.Union(other) // return a new set include 1, "hello", "you", 'I'
 diff := s.Diff(other) // return a new set include 1 , 'I', and "you"
 s.Elemetns // return []interface{}{1, "hello", 'I'}
 ```
-I am new to go. I want to learn go by writing go code. The datatypes above I think are very useful for daily development.
 some code inspired by another golang package [collections](https://github.com/chenjiandongx/collections).
